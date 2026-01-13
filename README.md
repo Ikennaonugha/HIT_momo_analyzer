@@ -25,7 +25,7 @@ An enterprise-level fullstack application that processes Mobile Money (MoMo) SMS
 
 - **Scrum Board:** 
 
----
+https://trello.com/invite/b/6964ec42a2764124d9b2113d/ATTI59609c82b8a1cea0c8fa31e266cf794f0E943E2B/momo-sms-analyzer-scrum-board
 
 ## Project Structure
 

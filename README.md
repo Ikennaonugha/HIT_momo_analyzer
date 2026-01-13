@@ -86,8 +86,8 @@ https://trello.com/invite/b/6964ec42a2764124d9b2113d/ATTI59609c82b8a1cea0c8fa31e
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/[your-username]/[repo-name].git
-cd [repo-name]
+git clone https://github.com/[your-username]/HIT_momo_analyzer.git
+cd HIT_momo_analyzer
 
 # Install dependencies
 pip install -r requirements.txt
@@ -122,6 +122,6 @@ bash scripts/serve_frontend.sh
 - Chart.js / D3.js (Data Visualization)
 
 ### Development Tools
-- Git & GitHub
+- Git, GitHub and Trello(Project Management)
 
 **Last Updated:** January 2026

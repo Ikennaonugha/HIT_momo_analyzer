@@ -39,7 +39,7 @@ An enterprise-level fullstack application that processes Mobile Money (MoMo) SMS
 │   ├── chart_handler.js              # Fetch + render charts/tables
 │   └── assets/                       # Images/icons (optional)
 ├── data/
-│   ├── raw/                          # Provided XML input (git-ignored)
+│   ├── raw/                          # Provided XML input
 │   │   └── momo.xml
 │   ├── processed/                    # Cleaned/derived outputs for frontend
 │   │   └── dashboard.json            # Aggregates the dashboard reads
@@ -68,9 +68,6 @@ An enterprise-level fullstack application that processes Mobile Money (MoMo) SMS
     ├── test_parse_xml.py             # Small unit tests
     ├── test_clean_normalize.py
     └── test_categorize.py
-```
-
----
 
 ## Setup Instructions (Coming Soon)
 
@@ -82,8 +79,8 @@ An enterprise-level fullstack application that processes Mobile Money (MoMo) SMS
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/[your-username]/[repo-name].git
-cd [repo-name]
+git clone https://github.com/IkennaOnugha/HIT_momo_analyzer.git
+cd HIT_momo_analyzer
 
 # Install dependencies
 pip install -r requirements.txt
@@ -107,15 +104,15 @@ bash scripts/serve_frontend.sh
 
 ### Backend
 - Python 3.8+
-- lxml / ElementTree (XML Parsing)
-- SQLite (Database)
-- FastAPI (Optional API Layer)
+- lxml / ElementTree
+- SQLite
+- FastAPI 
 
 ### Frontend
 - HTML5
 - CSS3
 - JavaScript (ES6+)
-- Chart.js / D3.js (Data Visualization)
+- Chart.js / D3.js
 
 ### Development Tools
 - Git & GitHub

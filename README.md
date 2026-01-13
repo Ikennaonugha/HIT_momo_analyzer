@@ -86,7 +86,7 @@ https://trello.com/invite/b/6964ec42a2764124d9b2113d/ATTI59609c82b8a1cea0c8fa31e
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/[your-username]/HIT_momo_analyzer.git
+git clone https://github.com/Ikennaonugha/HIT_momo_analyzer.git
 cd HIT_momo_analyzer
 
 # Install dependencies

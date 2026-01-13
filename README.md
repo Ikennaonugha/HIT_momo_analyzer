@@ -18,10 +18,14 @@ An enterprise-level fullstack application that processes Mobile Money (MoMo) SMS
 
 ## Project Links
 
-- **System Architecture:** 
+- **System Architecture (Draw.io):** 
+![MoMo SMS Analytics System Architecture](web/assets/architecture.png)
+
+[View Project Architecture diagram here](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=HIT-MoMo%20SMS%20Analytics.drawio&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1mZt3cSCx2Y3F8TUrAiWjpK6ndlS66URa%26export%3Ddownload#%7B%22pageId%22%3A%22HOtfubfBUdEroN17rY5i%22%7D)
+
 - **Scrum Board:** 
 
----
+https://trello.com/invite/b/6964ec42a2764124d9b2113d/ATTI59609c82b8a1cea0c8fa31e266cf794f0E943E2B/momo-sms-analyzer-scrum-board
 
 ## Project Structure
 
@@ -115,6 +119,6 @@ bash scripts/serve_frontend.sh
 - Chart.js / D3.js
 
 ### Development Tools
-- Git & GitHub
+- Git, GitHub and Trello(Project Management)
 
 **Last Updated:** January 2026

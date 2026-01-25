@@ -97,8 +97,12 @@ Handling Relationships: > The Many-to-Many relationship in transaction_participa
 ├── .gitignore                        # Git ignore rules
 ├── requirements.txt                  # Python dependencies
 ├── index.html                        # Dashboard entry (static)
+├── database/
+│   └── database_setup                # Database setup code (Create and insert seed)
 ├── docs/
 │   └── architecture.png              # System architecture diagram
+|   |── crud tests                    # all crud test images
+|      └── crud_test0.png             #images used for test
 ├── web/
 │   ├── styles.css                    # Dashboard styling
 │   ├── chart_handler.js              # Fetch + render charts/tables

@@ -45,3 +45,8 @@ INNER JOIN transaction_participants p
 LEFT JOIN users u
   ON u.user_id = p.user_id
 ORDER BY t.transaction_date DESC, t.transaction_id, p.user_role;
+
+#testing age constraint by inserting a user under 16 years old
+INSERT IGNORE INTO users (user_id, full_name, phone_number, id_number, date_of_birth) VALUES
+('HIT-User-007', 'Joe Baby', '+25078675564', 'LT123456789', '2015-05-15');
+SELECT * FROM users WHERE user_id = 'HIT-User-007';

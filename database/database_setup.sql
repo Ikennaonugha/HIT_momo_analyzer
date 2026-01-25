@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS users (
 
   -- adding unique constraint to prevent duplicate phone numbers and national id numbers
     CONSTRAINT unique_phone_number UNIQUE (phone_number),
-    CONSTRAINT unique_id_number UNIQUE (id_number)    
+    CONSTRAINT unique_id_number UNIQUE (id_number) 
 
 ) ENGINE=InnoDB;
 
@@ -230,3 +230,23 @@ INSERT INTO system_logs (transaction_id, sms_id, log_message, log_level) VALUES
 (3, 3, 'Could not add the transaction sender information', 'WARNING'),
 (5, 5, 'Transaction 13913173274 successfully processed from SMS 5', 'INFO');
 
+-- Adding a check during insert and update to ensure no user under 16 years can be added or updated
+DELIMITER $$
+
+CREATE TRIGGER trg_users_min_age BEFORE INSERT ON users FOR EACH ROW
+BEGIN
+  IF TIMESTAMPDIFF(YEAR, NEW.date_of_birth, CURDATE()) < 16 THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'User must be at least 16 years old';
+  END IF;
+END$$
+
+CREATE TRIGGER trg_users_min_age_update BEFORE UPDATE ON users FOR EACH ROW
+BEGIN
+  IF TIMESTAMPDIFF(YEAR, NEW.date_of_birth, CURDATE()) < 16 THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'User must be at least 16 years old';
+  END IF;
+END$$
+
+DELIMITER ;

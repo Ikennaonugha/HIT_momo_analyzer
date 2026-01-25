@@ -81,8 +81,11 @@ Handling Relationships: > The Many-to-Many relationship in transaction_participa
 ### Insert Operation (Key check: Inserting new transaction specifying a category that does not exist)
 ![Insert into Transactions](docs/crud%20tests/crud_test6.png)
 
-### Check Constraint: Inserting a negative value to the transaction amount column
+### Check Constraint: Inserting a negative value to the transaction amount column (FAILED)
 ![Check Constraint](docs/crud%20tests/crud_test7.png)
+
+### Trigger Test: Inserting a user under 16yrs old and testing the trigger error (FAILED)
+![Age Limit Test](docs/crud%20tests/crud_test11.png)
 
 
 ## Project Structure

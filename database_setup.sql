@@ -6,7 +6,7 @@ USE HIT_momo_analyzer;
 CREATE TABLE IF NOT EXISTS sms_messages (
   sms_id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Internal unique identifier for each SMS message analyzed',
 
-  sms_body TEXT NOT NULL COMMENT 'The full raw text content of the SMS message',
+  sms_body LONGTEXT NOT NULL COMMENT 'The full raw text content of the SMS message',
 
   date_recorded DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp when the SMS message was recorded into the database',
 
@@ -161,7 +161,9 @@ INSERT INTO sms_messages (sms_body, date_recorded, read_status) VALUES
 
 ('<sms protocol="0" address="M-Money" date="1715452495316" type="1" subject="null" body="*165*S*10000 RWF transferred to Samuel Carter (250791666666) from 36521838 at 2024-05-11 20:34:47 . Fee was: 100 RWF. New balance: 28300 RWF. Kugura ama inite cg interineti kuri MoMo, Kanda *182*2*1# .*EN#" toa="null" sc_toa="null" service_center="+250788110381" read="1" status="-1" locked="0" date_sent="1715452487000" sub_id="6" readable_date="11 May 2024 8:34:55 PM" contact_name="unknown" />', '2026-01-08 16:20:00', TRUE),
 
-('<sms protocol="0" address="M-Money" date="1715506895734" type="1" subject="null" body="*162*TxId:13913173274*S*Your payment of 2000 RWF to Airtime with token has been completed at 2024-05-12 11:41:28. Fee was 0 RWF. Your new balance: 25280 RWF . Message: - -. *EN#" toa="null" sc_toa="null" service_center="+250788110381" read="1" status="-1" locked="0" date_sent="1715506888000" sub_id="6" readable_date="12 Mble_date="12 contact_name="unknown" />', '2026-01-05 11:10:00', TRUE);
+('<sms protocol="0" address="M-Money" date="1715506895734" type="1" subject="null" body="*162*TxId:13913173274*S*Your payment of 2000 RWF to Airtime with token has been completed at 2024-05-12 11:41:28. Fee was 0 RWF. Your new balance: 25280 RWF . Message: - -. *EN#" toa="null" sc_toa="null" service_center="+250788110381" read="1" status="-1" locked="0" date_sent="1715506888000" sub_id="6" readable_date="12 June 2025" contact_name="unknown" />', '2026-01-05 11:10:00', TRUE),
+
+('Failed SMS example for testing', '2026-01-10 12:00:00', FALSE);
 
 # Adding sample data in the transaction_categories table
 INSERT INTO transaction_categories (category_name, category_description) VALUES
@@ -185,7 +187,7 @@ INSERT INTO transactions (transaction_category_id, sms_id, transaction_reference
 (4, 2, '17006777609', 'RWF', 50000.00, 1100.00, 'SUCCESS', '2024-11-23 13:23:44'),
 (3, 3, 'TXN123458', 'RWF', 40000.00, 0.00, 'PENDING', '2024-05-11 18:43:49'),
 (1, 4, 'TXN123459', 'RWF', 10000.00, 100.00, 'FAILED', '2024-05-11 20:34:47'),
-(5, 5, '13913173274', 'RWF', 2000.00, 00.00, 'SUCCESS', '2024-05-12 11:41:28');
+(5, 5, '13913173274', 'RWF', 2000.00, 0.00, 'SUCCESS', '2024-05-12 11:41:28');
 
 # Adding sample data in the transaction_participants table
 INSERT INTO transaction_participants (transaction_id, user_id, user_role, balance_after) VALUES
@@ -199,8 +201,9 @@ INSERT INTO transaction_participants (transaction_id, user_id, user_role, balanc
 INSERT INTO system_logs (transaction_id, sms_id, log_message, log_level) VALUES
 (1, 1, 'Transaction 76662021700 successfully processed from SMS 1', 'INFO'),
 (2, 2, 'Transaction 17006777609 successfully processed from SMS 2', 'INFO'),
-(NULL, 4, 'Failed to process transaction from SMS 4 due to insufficient funds', 'ERROR'),
-(3, 3, 'Could not add the transaction participant information', 'WARNING'),
+(NULL, 6, 'Failed to process transaction from SMS 6 due to insufficient funds', 'ERROR'),
+(3, 3, 'Transaction registered on the database', 'INFO'),
+(3, 3, 'Could not add the transaction sender information', 'WARNING'),
 (5, 5, 'Transaction 13913173274 successfully processed from SMS 5', 'INFO');
 
 

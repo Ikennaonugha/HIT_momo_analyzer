@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "sms_message": {
+      "sms_id": 1,
+      "sms_body": "<sms protocol=\"0\" address=\"M-Money\" body=\"You have received 2000 RWF from Jane Smith...\" />",
+      "date_recorded": "2026-01-01 10:15:00",
+      "read_status": true
+    },
+    "user": {
+      "user_id": "HIT-User-001",
+      "full_name": "Helen Okereke",
+      "phone_number": "+25078678567",
+      "id_number": "A123456789",
+      "date_of_birth": "1990-05-15",
+      "account_balance": 0.00
+    },
+    "transaction_category": {
+      "transaction_category_id": 1,
+      "category_name": "Transfer",
+      "category_description": "Money transferred between accounts"
+    }
+  },
+
+  "complex_transaction_example": {
+    "description": "Example of a processed Transfer transaction joining SMS, Transaction, and Participant data",
+    "transaction_id": 1,
+    "reference": "76662021700",
+    "timestamp": "2024-05-10 16:30:51",
+    "financials": {
+      "amount": 2000.00,
+      "currency": "RWF",
+      "service_fee": 0.00,
+      "status": "SUCCESS"
+    },
+    "category": {
+      "id": 1,
+      "name": "Transfer"
+    },
+    "source_sms": {
+      "sms_id": 1,
+      "raw_text": "You have received 2000 RWF from Jane Smith (*********013)..."
+    },
+    "participants": [
+      {
+        "user_id": "HIT-User-005",
+        "name": "Jane Smith",
+        "role": "SENDER",
+        "balance_after": 4500.00
+      },
+      {
+        "user_id": "HIT-User-001",
+        "name": "Helen Okereke",
+        "role": "RECEIVER",
+        "balance_after": 2000.00
+      }
+    ]
+  },
+
+  "system_log_example": {
+    "log_id": 1,
+    "level": "INFO",
+    "message": "Transaction 76662021700 successfully processed from SMS 1",
+    "timestamp": "2026-01-25 21:30:00",
+    "linked_ids": {
+      "transaction_id": 1,
+      "sms_id": 1
+    }
+  }
+}

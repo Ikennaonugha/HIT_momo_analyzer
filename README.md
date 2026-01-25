@@ -27,6 +27,39 @@ An enterprise-level fullstack application that processes Mobile Money (MoMo) SMS
 
 https://trello.com/invite/b/6964ec42a2764124d9b2113d/ATTI59609c82b8a1cea0c8fa31e266cf794f0E943E2B/momo-sms-analyzer-scrum-board
 
+
+## Database Architecture
+The system uses a MySQL 8.0 database named HIT_momo_analyzer.
+
+Core Entities
+Users: Stores KYC information (ID numbers, DOB, Balance).
+
+Transactions: The central ledger for financial movements.
+
+Transaction Participants: A junction table managing roles (Sender/Receiver).
+
+SMS Messages: Stores the raw XML-formatted SMS strings.
+
+System Logs: Tracks processing status and errors.
+
+Data Mapping: SQL to JSON
+To bridge the gap between our relational storage and modern API requirements, we map our tables to JSON objects.
+
+| SQL Table | JSON Object | Key Mapping |
+|------|----------------|------|
+| users | user| id_number → id_number |
+| transactions | financials | amount → amount|
+| transaction_participants | participants | Map rows to a Nested Array [] |
+
+Complex Object Logic
+The system serializes a "Complete Transaction" by joining the transactions table with its participants. In JSON, this is represented as a single object where the sender and receiver are nested inside an array, making it easier for mobile front-ends to render the transaction details.
+
+SQL to JSON Mapping (Task 3 Documentation)
+
+Mapping Logic Documentation: Our serialization strategy converts the flat SQL structure into a hierarchical JSON format. For instance, the Transaction JSON object does not just show the transaction_category_id; it performs a lookup to provide the category_name.
+
+Handling Relationships: > The Many-to-Many relationship in transaction_participants is converted from multiple database rows into a single JSON array of objects. This reduces the number of API calls needed to identify all parties involved in a transfer.
+
 ## Project Structure
 
 ```

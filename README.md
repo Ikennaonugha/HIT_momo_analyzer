@@ -60,6 +60,31 @@ Mapping Logic Documentation: Our serialization strategy converts the flat SQL st
 
 Handling Relationships: > The Many-to-Many relationship in transaction_participants is converted from multiple database rows into a single JSON array of objects. This reduces the number of API calls needed to identify all parties involved in a transfer.
 
+
+## CRUD OPERATIONS (DATABASE TEST)
+
+### Inserting a new user to the users table (SUCCESS)
+![New User Insert](docs/crud%20tests/crud_test2.png)
+
+### Inserting a new transaction (SUCCESS)
+![New Transaction Inserted](docs/crud%20tests/crud_test4.png)
+
+### Read Operation: Viewing transactions with their categories sorted fron newest to oldest (SUCCESS)
+![Read Transactions](docs/crud%20tests/crud_test3.png)
+
+### Update Operation: Updating the user's account balance (SUCCESS)
+![User Balance Update](docs/crud%20tests/crud_test9.png)
+
+### Delete Operation: Deleting a transaction category referenced in transactions (RESTRICTED)
+![Delete Transaction Category](docs/crud%20tests/crud_test8.png)
+
+### Insert Operation (Key check: Inserting new transaction specifying a category that does not exist)
+![Insert into Transactions](docs/crud%20tests/crud_test6.png)
+
+### Check Constraint: Inserting a negative value to the transaction amount column
+![Check Constraint](docs/crud%20tests/crud_test7.png)
+
+
 ## Project Structure
 
 ```

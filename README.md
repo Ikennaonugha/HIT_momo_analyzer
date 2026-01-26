@@ -34,31 +34,54 @@ The system uses a MySQL 8.0 database named HIT_momo_analyzer.
 Core Entities
 Users: Stores KYC information (ID numbers, DOB, Balance).
 
-Transactions: The central ledger for financial movements.
+transaction_categories: Stores a list of all accepted categories for transactions.
 
-Transaction Participants: A junction table managing roles (Sender/Receiver).
+Transactions: The central ledger for sms analysis and financial operations.
 
-SMS Messages: Stores the raw XML-formatted SMS strings.
+Transaction_participants: A junction table managing roles (Sender/Receiver).
 
-System Logs: Tracks processing status and errors.
+sms_messages: Stores the raw XML-formatted SMS strings.
 
-Data Mapping: SQL to JSON
-To bridge the gap between our relational storage and modern API requirements, we map our tables to JSON objects.
+system_logs: Tracks processing status and errors.
 
-| SQL Table | JSON Object | Key Mapping |
-|------|----------------|------|
-| users | user| id_number → id_number |
-| transactions | financials | amount → amount|
-| transaction_participants | participants | Map rows to a Nested Array [] |
+## SQL to JSON Mapping Documentation
+### Overview:
+- This project maps a relational MySQL database into structured JSON responses suitable for API consumption. The mapping demonstrates how normalized tables are joined and serialized into meaningful, nested JSON objects.
 
-Complex Object Logic
-The system serializes a "Complete Transaction" by joining the transactions table with its participants. In JSON, this is represented as a single object where the sender and receiver are nested inside an array, making it easier for mobile front-ends to render the transaction details.
+### Table to JSON Mapping:
+- The table below shows how each SQL table maps to its corresponding JSON representation used in API responses.
 
-SQL to JSON Mapping (Task 3 Documentation)
+| SQL Table | Purpose in Database | JSON Representation | Notes |
+|----------|--------------------|--------------------|-------|
+| `users` | Stores user identity and account balance | `User` | Embedded inside transaction participants |
+| `sms_messages` | Stores raw MoMo SMS content | `SmsMessage` | Nested under `transaction.sms_message` |
+| `transaction_categories` | Defines transaction types | `TransactionCategory` | Nested under `transaction.transaction_category` |
+| `transactions` | Core transaction records | `Transaction` | Nested under each participant |
+| `transaction_participants` | Links users to transactions | `Complete_transaction_per_row` | Base table for compiled API response |
+| `system_logs` | Tracks processing and errors | `SystemLog[]` | Returned as an array per transaction |
 
-Mapping Logic Documentation: Our serialization strategy converts the flat SQL structure into a hierarchical JSON format. For instance, the Transaction JSON object does not just show the transaction_category_id; it performs a lookup to provide the category_name.
+---
 
-Handling Relationships: > The Many-to-Many relationship in transaction_participants is converted from multiple database rows into a single JSON array of objects. This reduces the number of API calls needed to identify all parties involved in a transfer.
+## JSON Serialization Strategy
+
+- The **transaction_participants** table is used as the primary join point.
+- SQL joins compile data from all related tables.
+- Each row is serialized into a single, nested JSON object.
+- This mirrors how real‑world APIs return joined relational data.
+
+Example structure:
+- Participant  
+  → User  
+  → Transaction  
+    → Transaction Category  
+    → SMS Message  
+    → System Logs
+
+
+## Notes
+
+- Database constraints (FKs, checks, uniqueness) are enforced at the SQL level.
+- Handling Relationships: > The Many-to-Many relationship in transaction_participants is converted from multiple database rows into a single JSON array of objects. This reduces the number of API calls needed to identify all parties involved in a transfer.
 
 
 ## CRUD OPERATIONS (DATABASE TEST)
@@ -93,7 +116,7 @@ Handling Relationships: > The Many-to-Many relationship in transaction_participa
 ```
 .
 ├── README.md                         # Setup, run, overview
-├── .env.example                      # DATABASE_URL or path to SQLite
+├── .env.example                      # DATABASE_URL or path to MySQL
 ├── .gitignore                        # Git ignore rules
 ├── requirements.txt                  # Python dependencies
 ├── index.html                        # Dashboard entry (static)
@@ -174,7 +197,7 @@ bash scripts/serve_frontend.sh
 ### Backend
 - Python 3.8+
 - lxml / ElementTree
-- SQLite
+- MySQL
 - FastAPI 
 
 ### Frontend
@@ -186,4 +209,19 @@ bash scripts/serve_frontend.sh
 ### Development Tools
 - Git, GitHub and Trello(Project Management)
 
-**Last Updated:** January 2026
+## AI Usage Log
+
+**AI Tool Used:** ChatGPT
+
+**Usage Summary:**
+- Reviewing code syntax and quality assurance (syntax errors)
+- Research on Mysql and cardinality best practices (Helped map resources, online articles and books that explains these concepts better.)
+- used to debug errors thrown during sql query execution and correct command syntax
+- Uniformity and grammer check on README
+
+**Attribution:**  
+AI assistance was used strictly as a support tool. All code logics, final decisions, schema designs, ERD and implementations were written, reviewed and approved by the HIT Team.
+
+---
+
+**Last Updated:** 26th January 2026.

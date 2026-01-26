@@ -44,6 +44,9 @@ sms_messages: Stores the raw XML-formatted SMS strings.
 
 system_logs: Tracks processing status and errors.
 
+- **Full Database Schema and ERD Diagram:** 
+![ERD Diagram](docs/erd_drawing.png)
+
 ## SQL to JSON Mapping Documentation
 ### Overview:
 - This project maps a relational MySQL database into structured JSON responses suitable for API consumption. The mapping demonstrates how normalized tables are joined and serialized into meaningful, nested JSON objects.

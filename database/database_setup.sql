@@ -233,6 +233,9 @@ INSERT INTO system_logs (transaction_id, sms_id, log_message, log_level) VALUES
 -- Adding a check during insert and update to ensure no user under 16 years can be added or updated
 DELIMITER $$
 
+DROP TRIGGER IF EXISTS trg_users_min_age $$
+DROP TRIGGER IF EXISTS trg_users_min_age_update $$
+
 CREATE TRIGGER trg_users_min_age BEFORE INSERT ON users FOR EACH ROW
 BEGIN
   IF TIMESTAMPDIFF(YEAR, NEW.date_of_birth, CURDATE()) < 16 THEN

@@ -45,7 +45,7 @@ sms_messages: Stores the raw XML-formatted SMS strings.
 system_logs: Tracks processing status and errors.
 
 - **Full Database Schema and ERD Diagram:** 
-![ERD Diagram](docs/erd_drawing.png)
+![ERD Diagram](docs/erd_diagram.png)
 
 ## SQL to JSON Mapping Documentation
 ### Overview:

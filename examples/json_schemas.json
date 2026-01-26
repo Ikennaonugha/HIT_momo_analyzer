@@ -1,69 +1,266 @@
 {
-  "entities": {
-    "sms_message": {
-      "sms_id": 1,
-      "sms_body": "<sms protocol=\"0\" address=\"M-Money\" body=\"You have received 2000 RWF from Jane Smith...\" />",
-      "date_recorded": "2026-01-01 10:15:00",
-      "read_status": true
-    },
-    "user": {
-      "user_id": "HIT-User-001",
-      "full_name": "Helen Okereke",
-      "phone_number": "+25078678567",
-      "id_number": "A123456789",
-      "date_of_birth": "1990-05-15",
-      "account_balance": 0.00
-    },
-    "transaction_category": {
-      "transaction_category_id": 1,
-      "category_name": "Transfer",
-      "category_description": "Money transferred between accounts"
-    }
-  },
+  "$id": "HIT_momo_analyzer/json_schemas.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HIT MoMo Analyzer JSON Schemas",
+  "type": "object",
 
-  "complex_transaction_example": {
-    "description": "Example of a processed Transfer transaction joining SMS, Transaction, and Participant data",
-    "transaction_id": 1,
-    "reference": "76662021700",
-    "timestamp": "2024-05-10 16:30:51",
-    "financials": {
-      "amount": 2000.00,
-      "currency": "RWF",
-      "service_fee": 0.00,
-      "status": "SUCCESS"
-    },
-    "category": {
-      "id": 1,
-      "name": "Transfer"
-    },
-    "source_sms": {
-      "sms_id": 1,
-      "raw_text": "You have received 2000 RWF from Jane Smith (*********013)..."
-    },
-    "participants": [
-      {
-        "user_id": "HIT-User-005",
-        "name": "Jane Smith",
-        "role": "SENDER",
-        "balance_after": 4500.00
+  "$defs": {
+    "User": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "user_id": { "type": "string", "maxLength": 15 },
+        "full_name": { "type": "string", "maxLength": 100 },
+        "phone_number": { "type": "string", "maxLength": 20 },
+        "id_number": { "type": "string", "maxLength": 50 },
+        "date_of_birth": { "type": "string", "format": "date" },
+        "account_balance": { "type": "number", "multipleOf": 0.01 },
+        "created_at": { "type": "string", "format": "date-time" }
       },
-      {
-        "user_id": "HIT-User-001",
-        "name": "Helen Okereke",
-        "role": "RECEIVER",
-        "balance_after": 2000.00
-      }
-    ]
-  },
+      "required": ["user_id", "full_name", "phone_number", "id_number", "date_of_birth", "account_balance", "created_at"]
+    },
 
-  "system_log_example": {
-    "log_id": 1,
-    "level": "INFO",
-    "message": "Transaction 76662021700 successfully processed from SMS 1",
-    "timestamp": "2026-01-25 21:30:00",
-    "linked_ids": {
-      "transaction_id": 1,
-      "sms_id": 1
+    "SmsMessage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sms_id": { "type": "integer" },
+        "sms_body": { "type": "string" },
+        "date_recorded": { "type": "string", "format": "date-time" },
+        "read_status": { "type": "boolean" }
+      },
+      "required": ["sms_id", "sms_body", "date_recorded", "read_status"]
+    },
+
+    "TransactionCategory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transaction_category_id": { "type": "integer" },
+        "category_name": { "type": "string", "maxLength": 50 },
+        "category_description": { "type": ["string", "null"], "maxLength": 100 }
+      },
+      "required": ["transaction_category_id", "category_name"]
+    },
+
+    "Transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transaction_id": { "type": "integer" },
+        "transaction_category_id": { "$ref": "#/$defs/TransactionCategory/properties/transaction_category_id" },
+        "sms_id": { "$ref": "#/$defs/SmsMessage/properties/sms_id" },
+        "transaction_reference": { "type": "string", "maxLength": 50 },
+        "currency": { "type": "string", "maxLength": 20 },
+        "amount": { "type": "number" },
+        "service_fee": { "type": "number" },
+        "transaction_status": { "type": "string", "enum": ["SUCCESS", "FAILED", "PENDING"] },
+        "transaction_date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["transaction_id","transaction_category_id","sms_id","transaction_reference","currency","amount","service_fee","transaction_status","transaction_date"
+      ]
+    },
+
+    "TransactionParticipant": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "participant_id": { "type": "integer" },
+        "transaction_id": {  "$ref": "#/$defs/Transaction/properties/transaction_id" },
+        "user_id": { "$ref": "#/$defs/User/properties/user_id" },
+        "user_role": { "type": "string", "enum": ["SENDER", "RECEIVER", "INITIATOR"] },
+        "balance_after": { "type": "number" }
+      },
+      "required": ["participant_id", "transaction_id", "user_id", "user_role", "balance_after"]
+    },
+
+    "SystemLog": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "log_id": { "type": "integer" },
+        "transaction_id": { "$ref": "#/$defs/Transaction/properties/transaction_id" },
+        "sms_id": { "$ref": "#/$defs/SmsMessage/properties/sms_id" },
+        "log_message": { "type": "string" },
+        "logged_at": { "type": "string", "format": "date-time" },
+        "log_level": { "type": "string", "enum": ["INFO", "WARNING", "ERROR"] }
+      },
+      "required": ["log_id", "log_message", "logged_at", "log_level"]
+    },
+
+    "Complete_transaction_per_row": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "participant_id": { "$ref": "#/$defs/TransactionParticipant/properties/participant_id" },
+        "user_role": { "$ref": "#/$defs/TransactionParticipant/properties/user_role" },
+        "balance_after": { "$ref": "#/$defs/TransactionParticipant/properties/balance_after" },
+
+        "user": { "$ref": "#/$defs/User" },
+
+        "transaction": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "transaction_id": { "$ref": "#/$defs/Transaction/properties/transaction_id" },
+            "transaction_reference": { "$ref": "#/$defs/Transaction/properties/transaction_reference" },
+            "currency": { "$ref": "#/$defs/Transaction/properties/currency" },
+            "amount": { "$ref": "#/$defs/Transaction/properties/amount" },
+            "service_fee": { "$ref": "#/$defs/Transaction/properties/service_fee" },
+            "transaction_status": { "$ref": "#/$defs/Transaction/properties/transaction_status" },
+            "transaction_date": { "$ref": "#/$defs/Transaction/properties/transaction_date" },
+
+            "transaction_category": { "$ref": "#/$defs/TransactionCategory" },
+            "sms_message": { "$ref": "#/$defs/SmsMessage" },
+            "SystemLog": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/SystemLog" }
+            }
+          },
+          "required": ["transaction_id","transaction_reference","currency","amount","service_fee","transaction_status","transaction_date","transaction_category","sms_message"
+          ]
+        }
+      },
+      "required": ["participant_id", "user_role", "balance_after", "user", "transaction"]
+    },
+
+    "Complete_transaction_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "endpoint": { "type": "string" },
+        "count": { "type": "integer", "minimum": 0 },
+        "rows": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Complete_transaction_per_row" }
+        }
+      },
+      "required": ["endpoint", "count", "rows"]
     }
-  }
+  },
+  
+    "properties": {
+      "User": { "$ref": "#/$defs/User" },
+      "SmsMessage": { "$ref": "#/$defs/SmsMessage" },
+      "TransactionCategory": { "$ref": "#/$defs/TransactionCategory" },
+      "Transaction": { "$ref": "#/$defs/Transaction" },
+      "TransactionParticipant": { "$ref": "#/$defs/TransactionParticipant" },
+      "SystemLog": { "$ref": "#/$defs/SystemLog" },
+      "Complete_transaction_response": { "$ref": "#/$defs/Complete_transaction_response" }
+    },
+
+    "examples":[
+    {
+      "endpoint": "GET /api/transaction-participants/joined?user_id=HIT-User-001&transaction_id=5",
+      "count": 1,
+      "rows": [
+        {
+          "participant_id": 3,
+          "user_role": "INITIATOR",
+          "balance_after": 25280.00,
+          "user": {
+            "user_id": "HIT-User-001",
+            "full_name": "Helen Okereke",
+            "phone_number": "+25078678567",
+            "id_number": "A123456789",
+            "date_of_birth": "1990-05-15",
+            "account_balance": 25280.00,
+            "created_at": "2026-01-01T00:00:00"
+          },
+          "transaction": {
+            "transaction_id": 5,
+            "transaction_reference": "13913173274",
+            "currency": "RWF",
+            "amount": 2000.00,
+            "service_fee": 0.00,
+            "transaction_status": "SUCCESS",
+            "transaction_date": "2024-05-12T11:41:28",
+            "transaction_category": {
+              "transaction_category_id": 5,
+              "category_name": "Airtime Purchase",
+              "category_description": "Purchase of mobile airtime credit"
+            },
+            "sms_message": {
+              "sms_id": 5,
+              "sms_body": "<sms protocol=\"0\" address=\"M-Money\" date=\"1715506895734\" type=\"1\" subject=\"null\" body=\"*162*TxId:13913173274*S*Your payment of 2000 RWF to Airtime with token has been completed at 2024-05-12 11:41:28. Fee was 0 RWF. Your new balance: 25280 RWF . Message: - -. *EN#\" />",
+              "date_recorded": "2026-01-05T11:10:00",
+              "read_status": true
+            },
+            "SystemLog": [{
+                "log_id": 6,
+                "transaction_id": 5,
+                "sms_id": 5,
+                "log_message": "Transaction 13913173274 successfully processed from SMS 5",
+                "logged_at": "2026-01-25T18:44:00",
+                "log_level": "INFO"
+              }]
+          }
+        }
+      ]
+    },
+
+    {
+      "endpoint": "GET /api/transaction-participants/joined?user_id=HIT-User-002&transaction_id=3",
+      "count": 1,
+      "rows": [
+        {
+          "participant_id": 4,
+          "user_role": "RECEIVER",
+          "balance_after": 40400.00,
+          "user": {
+            "user_id": "HIT-User-002",
+            "full_name": "Toluwani Oladeji",
+            "phone_number": "+25078812345",
+            "id_number": "B987654321",
+            "date_of_birth": "1985-10-20",
+            "account_balance": 40400.00,
+            "created_at": "2026-01-01T00:00:00"
+          },
+          "transaction": {
+            "transaction_id": 3,
+            "transaction_reference": "TXN123458",
+            "currency": "RWF",
+            "amount": 40000.00,
+            "service_fee": 0.00,
+            "transaction_status": "PENDING",
+            "transaction_date": "2024-05-11T18:43:49",
+            "transaction_category": {
+              "transaction_category_id": 3,
+              "category_name": "Deposit",
+              "category_description": "Cash deposit into account"
+            },
+            "sms_message": {
+              "sms_id": 3,
+              "sms_body": "<sms protocol=\"0\" address=\"M-Money\" date=\"1715445936412\" type=\"1\" subject=\"null\" body=\"*113*R*A bank deposit of 40000 RWF has been added to your mobile money account at 2024-05-11 18:43:49. Your NEW BALANCE :40400 RWF. Cash Deposit::CASH::::0::250795963036.Thank you for using MTN MobileMoney.*EN#\" />",
+              "date_recorded": "2026-01-01T09:45:00",
+              "read_status": false
+            },
+            "SystemLog": [
+              {
+                "log_id": 4,
+                "transaction_id": 3,
+                "sms_id": 3,
+                "log_message": "Transaction registered on the database.",
+                "logged_at": "2026-01-25T18:44:00",
+                "log_level": "INFO"
+              },
+              {
+                "log_id": 5,
+                "transaction_id": 3,
+                "sms_id": 3,
+                "log_message": "Could not add the transaction sender information",
+                "logged_at": "2026-01-25T18:45:00",
+                "log_level": "WARNING"
+              }
+            ]
+          }
+        }
+      ]
+    }
+    ]
+
 }
+
+
+ 
+

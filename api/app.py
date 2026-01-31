@@ -15,3 +15,13 @@ def load_transactions():
 
 transactions = load_transactions()
 transactions_dict = {txn["id"]: txn for txn in transactions}
+
+
+class TransactionHandler(BaseHTTPRequestHandler):
+
+    def _send_response(self, status=200, data=None):
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        if data is not None:
+            self.wfile.write(json.dumps(data, indent=4).encode())

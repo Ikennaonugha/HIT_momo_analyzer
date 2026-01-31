@@ -25,3 +25,20 @@ class TransactionHandler(BaseHTTPRequestHandler):
         self.end_headers()
         if data is not None:
             self.wfile.write(json.dumps(data, indent=4).encode())
+    def do_GET(self):
+        if self.path == "/transactions":
+            self._send_response(200, transactions)
+
+        else:
+            match = re.match(r"/transactions/(TXN\d+)", self.path)
+            if match:
+                txn_id = match.group(1)
+                txn = transactions_dict.get(txn_id)
+                if txn:
+                    self._send_response(200, txn)
+                else:
+                    self._send_response(404, {"error": "Transaction not found"})
+            else:
+                self._send_response(404, {"error": "Invalid endpoint"})
+
+    

@@ -225,6 +225,94 @@ bash scripts/serve_frontend.sh
 **Attribution:**  
 AI assistance was used strictly as a support tool. All code logics, final decisions, schema designs, ERD and implementations were written, reviewed and approved by the HIT Team.
 
+# MoMo Transaction API
+
+A simple REST API for managing mobile money transactions.
+
+## Setup
+
+### 1. Prerequisites
+
+- Python 3.6+
+
+### 2. Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/HIT_momo_analyzer.git
+cd api
+```
+
+### 3. Run the Server
+
+```bash
+python api/app.py
+```
+
+Server will start on `http://localhost:8000`
+
+## Usage
+
+All endpoints require Basic Authentication:
+- **Username:** `admin`
+- **Password:** `Banana_boy`
+
+### Get All Transactions
+
+```bash
+curl -u admin:Banana_boy http://localhost:8000/transactions
+```
+
+### Get Single Transaction
+
+```bash
+curl -u admin:Banana_boy http://localhost:8000/transactions/TXN001
+```
+
+### Create Transaction
+
+```bash
+curl -X POST http://localhost:8000/transactions \
+  -u admin:Banana_boy \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "TXN1681",
+    "transaction_id": "TX123",
+    "sender": "Alice",
+    "receiver": "Bob",
+    "amount": 5000.0,
+    "currency": "RWF",
+    "date": "02 Feb 2026",
+    "type": "Payment",
+    "body": "SMS Message"
+  }'
+```
+
+### Update Transaction
+
+```bash
+curl -X PUT http://localhost:8000/transactions/TXN001 \
+  -u admin:Banana_boy \
+  -H "Content-Type: application/json" \
+  -d '{"amount": 7000.0}'
+```
+
+### Delete Transaction
+
+```bash
+curl -X DELETE http://localhost:8000/transactions/TXN001 \
+  -u admin:Banana_boy
+```
+
+## API Documentation
+
+See [API_DOCS.md](docs/api_DOCS.md) for complete endpoint documentation.
+
+## Notes
+
+- Data is stored in `data/processed/transactions.json`
+- Changes are in-memory only (not persisted to file)
+- For production use, implement HTTPS and proper authentication
 ---
 
-**Last Updated:** 26th January 2026.
+**Last Updated:** 2nd Febuary 2026.

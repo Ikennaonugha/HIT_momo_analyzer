@@ -277,7 +277,7 @@ curl -X POST http://localhost:8000/transactions \
   -H "Content-Type: application/json" \
   -d '{
     "id": "TXN1681",
-    "transaction_id": "TX123",
+    "transaction_id": "26811810649",
     "sender": "Alice",
     "receiver": "Bob",
     "amount": 5000.0,
@@ -306,7 +306,7 @@ curl -X DELETE http://localhost:8000/transactions/TXN001 \
 
 ## API Documentation
 
-See [API_DOCS.md](docs/api_DOCS.md) for complete endpoint documentation.
+See [API_DOCS.md](docs/api_docs.md) for complete endpoint documentation.
 
 ## Notes
 

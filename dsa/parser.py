@@ -34,7 +34,7 @@ def parse_momo_data(file_path):
 
             # 2. Extract Financial ID
             tx_id_search = re.search(r'(?:TxId:|Transaction Id:)\s*(\d+)', body)
-            financial_id = tx_id_search.group(1) if tx_id_search else "N/A"
+            transaction_id = tx_id_search.group(1) if tx_id_search else "N/A"
 
             # 3. Improved Amount Extraction
             amount_match = re.search(r'([\d,.]+)\s*RWF', body)
@@ -63,7 +63,7 @@ def parse_momo_data(file_path):
             # 5. Build the record
             record = {
                 "id": system_id,
-                "financial_id": financial_id,
+                "transaction_id": transaction_id,
                 "sender": sender,
                 "receiver": receiver,
                 "amount": amount,

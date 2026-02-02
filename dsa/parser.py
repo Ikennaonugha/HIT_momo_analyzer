@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 import json
 import re
-import time
 
 def parse_momo_data(file_path):
     try:
@@ -88,7 +87,6 @@ if __name__ == "__main__":
     
     if parsed_data or skipped_data:
         print(f"Successfully processed {len(parsed_data) + len(skipped_data)} messages.")
-        run_dsa_comparison(parsed_data)
         
         with open('transactions.json', 'w') as f:
             json.dump(parsed_data, f, indent=4)

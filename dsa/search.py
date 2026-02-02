@@ -3,7 +3,7 @@ import time
 
 
 # Load cleaned transactions from JSON file
-with open("../transactions.json", "r") as file:
+with open("../data/processed/transactions.json", "r") as file:
     transactions_file = json.load(file)   # List of transaction dictionaries
 
 # Linear Search (Scan through List)

@@ -80,32 +80,6 @@ def parse_momo_data(file_path):
         print(f"Error parsing XML: {e}")
         return [], []
 
-# --- DSA INTEGRATION (Task 5) ---
-def run_dsa_comparison(data_list):
-    if not data_list:
-        return
-    
-    data_dict = {item['id']: item for item in data_list}
-    target = "TXN001" 
-    
-    print(f"\n--- DSA Search Comparison ({len(data_list)} records) ---")
-    
-    start_linear = time.perf_counter()
-    result_linear = next((item for item in data_list if item['id'] == target), None)
-    end_linear = time.perf_counter()
-    
-    start_dict = time.perf_counter()
-    result_dict = data_dict.get(target)
-    end_dict = time.perf_counter()
-    
-    print(f"Linear Search Time:   {end_linear - start_linear:.8f} seconds")
-    print(f"Dictionary Lookup Time: {end_dict - start_dict:.8f} seconds")
-    
-    diff = end_dict - start_dict
-    if diff > 0:
-        gain = (end_linear - start_linear) / diff
-        print(f"Efficiency Gain: {gain:.2f}x faster")
-
 if __name__ == "__main__":
     # Ensure this path is correct relative to where you run the script!
     # If running from project root: 'dsa/modified_sms_v2.xml'

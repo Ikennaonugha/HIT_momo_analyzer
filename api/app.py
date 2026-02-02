@@ -3,7 +3,7 @@ import json
 import re
 import base64
 
-DATA_FILE = "transactions.json"
+DATA_FILE = "data/processed/transactions.json"
 
 USERNAME = "admin"
 PASSWORD = "Banana_boy"
